@@ -9,6 +9,7 @@ import store from '@/store';
 import Home from '@/containers/Home';
 import SignIn from '@/containers/SignIn';
 import SignUp from '@/containers/SignUp';
+import Code from '@/containers/Code';
 
 import PrivateRoute from '@/components/helpers/PrivateRoute';
 
@@ -29,6 +30,7 @@ const App: React.FC = () => (
           <PrivateRoute path="/" component={Home} exact />
           <Route path="/sign-in" component={SignIn} />
           <Route path="/sign-up" component={SignUp} />
+          <Route path="/code" component={Code} />
         </Switch>
       </StylesProvider>
     </Provider>

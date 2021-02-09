@@ -11,3 +11,9 @@ export const signOn = (data: ITokenCredentials) => instance.post<{
   refreshToken: string;
   tokenType: string;
 }>('/auth/sign-on', data);
+
+export const changeDefaultPassword = (data: {
+  email: string;
+  password: string;
+  oldPassword: string;
+}) => instance.post('/auth/password/challenge', data);

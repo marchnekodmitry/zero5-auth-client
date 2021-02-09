@@ -16,7 +16,8 @@ export type AuthActions =
   | ReturnType<typeof authActions.setIsResolved>
   | ReturnType<typeof authActions.setIsRejected>
   | ReturnType<typeof authActions.setUser>
-  | ReturnType<typeof authActions.logout>;
+  | ReturnType<typeof authActions.logout>
+  | ReturnType<typeof authActions.setPasswordChallenge>;
 
 export const signUpAction = (data: ICredentials): AsyncAction => async (dispatch) => {
   try {
@@ -27,6 +28,8 @@ export const signUpAction = (data: ICredentials): AsyncAction => async (dispatch
     dispatch(authActions.setIsResolved());
   } catch (e) {
     dispatch(authActions.setIsRejected());
+
+    throw new Error(e.type);
   }
 };
 

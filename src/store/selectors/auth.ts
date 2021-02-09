@@ -28,3 +28,8 @@ export const selectAuthUser = createSelector(
   selectAuth,
   ({ user }) => user,
 );
+
+export const selectPasswordChallenge = createSelector(
+  selectAuth,
+  ({ passwordChallenge }) => passwordChallenge,
+);

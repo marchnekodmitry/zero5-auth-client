@@ -6,6 +6,10 @@ export interface AuthState {
   isResolved: boolean;
   isRejected: boolean;
   user: IUser | null;
+  passwordChallenge: {
+    email: string;
+    password: string;
+  } | null;
 }
 
 const initialState: AuthState = {
@@ -13,6 +17,7 @@ const initialState: AuthState = {
   isResolved: false,
   isRejected: false,
   user: null,
+  passwordChallenge: null,
 };
 
 export class AuthReducer extends ImmerReducer<AuthState> {
@@ -43,6 +48,14 @@ export class AuthReducer extends ImmerReducer<AuthState> {
     this.draftState.isResolved = false;
     this.draftState.isRejected = false;
     this.draftState.user = null;
+    this.draftState.passwordChallenge = null;
+  }
+
+  setPasswordChallenge(data: {
+    email: string;
+    password: string;
+  }) {
+    this.draftState.passwordChallenge = data;
   }
 }
 

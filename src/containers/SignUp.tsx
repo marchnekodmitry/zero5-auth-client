@@ -6,7 +6,7 @@ import { Button, TextField, Typography } from '@material-ui/core';
 
 import useForm from '@/utils/hooks/useForm';
 
-import { signInAction, signUpAction } from '@/store/actions/auth';
+import { authActions, signInAction, signUpAction } from '@/store/actions/auth';
 
 const SignUp: React.FC = () => {
   const dispatch = useDispatch();
@@ -21,7 +21,21 @@ const SignUp: React.FC = () => {
   const handleSubmit = React.useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await dispatch(signUpAction(data));
+    try {
+      await dispatch(signUpAction(data));
+    } catch (error) {
+      if (error.message === 'PasswordRecoveryRequiredError') {
+        dispatch(authActions.setPasswordChallenge({
+          email: data.email,
+          password: data.password,
+        }));
+
+        history.push('/code');
+
+        return;
+      }
+    }
+
     await dispatch(signInAction({
       email: data.email,
       password: data.password,
