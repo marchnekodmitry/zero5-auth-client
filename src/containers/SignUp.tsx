@@ -33,7 +33,7 @@ const SignUp: React.FC = () => {
   return (
     <Page>
       <Wrapper onSubmit={handleSubmit}>
-        <Typography variant="h2" align="center" color="primary">CLIENT</Typography>
+        <Typography variant="h2" align="center" color="primary">ZERO5</Typography>
         <TextField value={data.name} onChange={setData('name')} label="Name" variant="filled" color="primary" />
         <TextField value={data.email} onChange={setData('email')} label="Email" type="email" name="email" autoComplete="on" variant="filled" color="primary" />
         <TextField value={data.password} onChange={setData('password')} label="Password" type="password" variant="filled" color="primary" />
