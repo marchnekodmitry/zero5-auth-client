@@ -6,13 +6,15 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development PORT=3000 webpack-dev-server",
     "build": "cross-env NODE_ENV=production webpack",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./"
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./",
+    "server": "node ."
   },
   "keywords": [],
   "author": "Lambda Team",
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "4.11.3",
+    "axios": "0.21.1",
     "immer-reducer": "0.7.10",
     "react": "16.14.0",
     "react-dom": "16.14.0",
@@ -38,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "4.4.1",
     "copy-webpack-plugin": "6.2.1",
     "cross-env": "7.0.3",
+    "dotenv": "8.2.0",
     "eslint": "7.11.0",
     "eslint-config-airbnb-typescript": "11.0.0",
     "eslint-plugin-import": "2.22.1",

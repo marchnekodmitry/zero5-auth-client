@@ -3,7 +3,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import createStyledComponentsTransformer from 'typescript-plugin-styled-components';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
-import { Configuration } from 'webpack';
+import { Configuration, DefinePlugin } from 'webpack';
+import dotenv from 'dotenv';
 
 type NODE_ENV = 'production' | 'development';
 const mode = process.env.NODE_ENV as NODE_ENV;
@@ -50,5 +51,8 @@ export default {
   plugins: [
     new HtmlWebpackPlugin({ template: './html/index.html' }),
     new CopyWebpackPlugin({ patterns: [{ from: 'assets', to: 'assets', noErrorOnMissing: true }] }),
+    new DefinePlugin({
+      'process.env': JSON.stringify(dotenv.config().parsed),
+    }),
   ],
 } as Configuration;

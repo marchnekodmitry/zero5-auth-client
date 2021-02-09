@@ -7,7 +7,11 @@
     "browser": true,
     "node": true
   },
+  "plugins": [
+    "react-hooks"
+  ],
   "rules": {
-    "@typescript-eslint/no-use-before-define": ["error", { "variables": false }]
+    "@typescript-eslint/no-use-before-define": ["error", { "variables": false }],
+    "react-hooks/exhaustive-deps": ["warn"]
   }
 }
