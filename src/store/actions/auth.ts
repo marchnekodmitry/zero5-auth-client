@@ -34,7 +34,7 @@ export const signUpAction = (data: ICredentials, history: any): AsyncAction => a
   } catch (e) {
     dispatch(authActions.setIsRejected());
 
-    if (e.message === 'PasswordRecoveryRequiredError') {
+    if (e.type === 'PasswordRecoveryRequiredError') {
       dispatch(authActions.setPasswordChallenge({
         email: data.email,
         password: data.password,

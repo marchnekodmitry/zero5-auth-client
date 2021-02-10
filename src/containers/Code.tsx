@@ -24,9 +24,7 @@ const Code: React.FC = () => {
       ...passwordChallenge!,
       oldPassword: code,
     });
-    await dispatch(signInAction(passwordChallenge!, history));
-
-    history.push('/');
+    dispatch(signInAction(passwordChallenge!, history));
   }, [code, dispatch, history, passwordChallenge]);
 
   return (
