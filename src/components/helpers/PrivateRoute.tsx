@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Redirect, Route, RouteProps, useLocation,
 } from 'react-router';
+import styled from 'styled-components';
+import { CircularProgress } from '@material-ui/core';
 
 import { meAction, signOnAction } from '@/store/actions/auth';
 import { selectAuthUser } from '@/store/selectors/auth';
@@ -64,7 +66,18 @@ const PrivateRoute: React.FC<Props> = (props) => {
     return <Route {...props} component={renderComponent} />;
   }
 
-  return null;
+  return (
+    <Page>
+      <CircularProgress />
+    </Page>
+  );
 };
+
+const Page = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+`;
 
 export default PrivateRoute;

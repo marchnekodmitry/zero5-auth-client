@@ -6,12 +6,19 @@ import { Button, TextField, Typography } from '@material-ui/core';
 
 import useForm from '@/utils/hooks/useForm';
 
-import { authActions, signInAction, signUpAction } from '@/store/actions/auth';
+import { signUpAction } from '@/store/actions/auth';
+
+const policies = [
+  'at least 8 characters',
+  'at least 1 number',
+  'at least 1 special character',
+];
 
 const SignUp: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const [loading, setLoading] = React.useState(false);
   const [data, setData] = useForm({
     name: '',
     email: '',
@@ -21,27 +28,11 @@ const SignUp: React.FC = () => {
   const handleSubmit = React.useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      await dispatch(signUpAction(data));
-    } catch (error) {
-      if (error.message === 'PasswordRecoveryRequiredError') {
-        dispatch(authActions.setPasswordChallenge({
-          email: data.email,
-          password: data.password,
-        }));
+    setLoading(true);
 
-        history.push('/code');
+    await dispatch(signUpAction(data, history));
 
-        return;
-      }
-    }
-
-    await dispatch(signInAction({
-      email: data.email,
-      password: data.password,
-    }));
-
-    history.push('/');
+    setLoading(false);
   }, [data, dispatch, history]);
 
   return (
@@ -51,7 +42,13 @@ const SignUp: React.FC = () => {
         <TextField value={data.name} onChange={setData('name')} label="Name" variant="filled" color="primary" />
         <TextField value={data.email} onChange={setData('email')} label="Email" type="email" name="email" autoComplete="on" variant="filled" color="primary" />
         <TextField value={data.password} onChange={setData('password')} label="Password" type="password" variant="filled" color="primary" />
-        <SubmitButton variant="contained" color="primary" type="submit">Sign Up</SubmitButton>
+        <PasswordTypography variant="body2">Password must have</PasswordTypography>
+        <List>
+          {policies.map((title) => (
+            <li><Typography variant="body2">{title}</Typography></li>
+          ))}
+        </List>
+        <SubmitButton variant="contained" color="primary" type="submit" disabled={loading}>{loading ? 'Loading...' : 'Sign Up' }</SubmitButton>
         <TextWrapper>
           <span>Already have an account?</span>
           {' '}
@@ -73,6 +70,15 @@ const Wrapper = styled.form`
   display: flex;
   flex-direction: column;
   width: 500px;
+`;
+
+const PasswordTypography = styled(Typography)`
+  margin-top: 10px;
+`;
+
+const List = styled.ul`
+  padding: 0 0 0 16px;
+  margin: 0;
 `;
 
 const SubmitButton = styled(Button)`

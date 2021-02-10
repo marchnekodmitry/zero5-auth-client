@@ -12,6 +12,7 @@ const SignIn: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const [loading, setLoading] = React.useState(false);
   const [data, setData] = useForm({
     email: '',
     password: '',
@@ -20,9 +21,11 @@ const SignIn: React.FC = () => {
   const handleSubmit = React.useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await dispatch(signInAction(data));
+    setLoading(true);
 
-    history.push('/');
+    await dispatch(signInAction(data, history));
+
+    setLoading(false);
   }, [data, dispatch, history]);
 
   return (
@@ -31,7 +34,7 @@ const SignIn: React.FC = () => {
         <Typography variant="h2" align="center" color="primary">ZERO5</Typography>
         <TextField value={data.email} onChange={setData('email')} label="Email" type="email" name="email" autoComplete="on" variant="filled" color="primary" />
         <TextField value={data.password} onChange={setData('password')} label="Password" type="password" variant="filled" color="primary" />
-        <SubmitButton variant="contained" color="primary" type="submit">Sign In</SubmitButton>
+        <SubmitButton variant="contained" color="primary" type="submit" disabled={loading}>{loading ? 'Loading...' : 'Sign In' }</SubmitButton>
         <TextWrapper>
           <span>Don&apos;t have an account?</span>
           {' '}

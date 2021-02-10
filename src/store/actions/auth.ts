@@ -19,21 +19,33 @@ export type AuthActions =
   | ReturnType<typeof authActions.logout>
   | ReturnType<typeof authActions.setPasswordChallenge>;
 
-export const signUpAction = (data: ICredentials): AsyncAction => async (dispatch) => {
+export const signUpAction = (data: ICredentials, history: any): AsyncAction => async (dispatch) => {
   try {
     dispatch(authActions.setIsPending());
 
     await signUp(data);
 
     dispatch(authActions.setIsResolved());
+
+    await dispatch(signInAction({
+      email: data.email,
+      password: data.password,
+    }, history));
   } catch (e) {
     dispatch(authActions.setIsRejected());
 
-    throw new Error(e.type);
+    if (e.message === 'PasswordRecoveryRequiredError') {
+      dispatch(authActions.setPasswordChallenge({
+        email: data.email,
+        password: data.password,
+      }));
+
+      history.push('/code');
+    }
   }
 };
 
-export const signInAction = (data: Pick<ICredentials, 'email' | 'password'>): AsyncAction => async (dispatch) => {
+export const signInAction = (data: Pick<ICredentials, 'email' | 'password'>, history: any): AsyncAction => async (dispatch) => {
   try {
     dispatch(authActions.setIsPending());
 
@@ -43,6 +55,8 @@ export const signInAction = (data: Pick<ICredentials, 'email' | 'password'>): As
     setRefreshToken(responseData.refreshToken);
 
     dispatch(authActions.setIsResolved());
+
+    history.push('/');
   } catch (e) {
     dispatch(authActions.setIsRejected());
   }
