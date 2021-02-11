@@ -82,10 +82,8 @@ export const meAction = (): AsyncAction => async (dispatch) => {
     const { data: responseData } = await me();
 
     dispatch(authActions.setUser(responseData));
-
-    return responseData;
   } catch (e) {
-    return e;
+    console.error(e);
   }
 };
 
@@ -95,9 +93,7 @@ export const logoutAction = (): AsyncAction => async (dispatch) => {
     setRefreshToken();
 
     dispatch(authActions.logout());
-
-    return true;
   } catch (e) {
-    return e;
+    console.error(e);
   }
 };

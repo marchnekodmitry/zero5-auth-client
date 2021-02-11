@@ -13,6 +13,7 @@ const Code: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const [loading, setLoading] = React.useState(false);
   const [code, setCode] = useInput('');
 
   const passwordChallenge = useSelector(selectPasswordChallenge);
@@ -20,11 +21,19 @@ const Code: React.FC = () => {
   const handleSubmit = React.useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await changeDefaultPassword({
-      ...passwordChallenge!,
-      oldPassword: code,
-    });
-    dispatch(signInAction(passwordChallenge!, history));
+    setLoading(true);
+
+    try {
+      await changeDefaultPassword({
+        ...passwordChallenge!,
+        oldPassword: code,
+      });
+      await dispatch(signInAction(passwordChallenge!, history));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   }, [code, dispatch, history, passwordChallenge]);
 
   return (
@@ -32,7 +41,7 @@ const Code: React.FC = () => {
       <Wrapper onSubmit={handleSubmit}>
         <Typography variant="h2" align="center" color="primary">ZERO5</Typography>
         <TextField value={code} onChange={setCode} label="Code" variant="filled" color="primary" />
-        <SubmitButton variant="contained" color="primary" type="submit">Confirm</SubmitButton>
+        <SubmitButton variant="contained" color="primary" type="submit" disabled={loading}>{loading ? 'Loading...' : 'Confirm' }</SubmitButton>
       </Wrapper>
     </Page>
   );

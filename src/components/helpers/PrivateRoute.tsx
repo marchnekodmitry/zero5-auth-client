@@ -2,7 +2,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Redirect, Route, RouteProps, useLocation,
+  Redirect, Route, RouteProps, useHistory, useLocation,
 } from 'react-router';
 import styled from 'styled-components';
 import { CircularProgress } from '@material-ui/core';
@@ -10,11 +10,14 @@ import { CircularProgress } from '@material-ui/core';
 import { meAction, signOnAction } from '@/store/actions/auth';
 import { selectAuthUser } from '@/store/selectors/auth';
 
+import { getAccessToken, getRefreshToken } from '@/utils/tokens';
+
 interface Props extends RouteProps {}
 
 const PrivateRoute: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const history = useHistory();
 
   const [allowRender, setAllowRender] = React.useState(false);
 
@@ -44,9 +47,13 @@ const PrivateRoute: React.FC<Props> = (props) => {
               clientId: params.get('clientId')!,
               requestToken: params.get('token')!,
             }));
+
+            history.replace(location.pathname);
           }
 
-          await dispatch(meAction());
+          if (getAccessToken() && getRefreshToken()) {
+            await dispatch(meAction());
+          }
         }
       } catch (e) {
         console.error(e);
@@ -56,7 +63,7 @@ const PrivateRoute: React.FC<Props> = (props) => {
     };
 
     start();
-  }, [dispatch, location, user]);
+  }, [dispatch, history, location, user]);
 
   if (isAuthorized && allowRender) {
     return <Route {...props} />;
